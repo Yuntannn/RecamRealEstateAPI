@@ -1,0 +1,6 @@
+@Recam.RealEstate.API_HostAddress = http://localhost:5093
+
+GET {{Recam.RealEstate.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
