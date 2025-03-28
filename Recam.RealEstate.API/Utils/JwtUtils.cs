@@ -16,6 +16,7 @@ namespace Recam.RealEstate.API.Utils
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.UserRole)
             };
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var creds = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);

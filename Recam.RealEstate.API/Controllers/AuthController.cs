@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Recam.RealEstate.API.DTOs;
 using Recam.RealEstate.API.Models;
+using Recam.RealEstate.API.Services.AuthService;
 using Recam.RealEstate.API.Utils;
 using System.Security.Claims;
 
@@ -13,83 +14,59 @@ namespace Recam.RealEstate.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _configuration;
-        public AuthController(UserManager<User> userManager,
-                              IConfiguration configuration)
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
         {
-            _userManager = userManager;
-            _configuration = configuration;
+            _authService = authService;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
         {
-            var user = new User
+            var result = await _authService.Register(registerRequestDto);
+            if (result.Succeeded)
             {
-                UserName = registerRequestDto.Username, // usernsme for login
-                Name = registerRequestDto.Username, // user's real name that stored in database
-                UserRole = registerRequestDto.UserRole
-            };
-            var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
-            if(result == null)
-            {
-                return BadRequest("Register user failed");
+                return Ok("User registered successfully");
             }
-            else if(result.Succeeded){
-                return Ok();
-            }
-            else
-            {
-                return BadRequest("Register user failed");
-            }
+            return BadRequest(result.Errors);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> login([FromBody] LoginRequestDto loginRequestDto)
         {
-            var user = await _userManager.FindByNameAsync(loginRequestDto.Username);
-            if(user == null)
+            var token = await _authService.Login(loginRequestDto);
+            if(token == null)
             {
-                return Unauthorized();
+                return Unauthorized("Invalid username or password");
             }
-            var isAuthorized = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
-            if (isAuthorized)
+            return Ok(new
             {
-                var key = _configuration.GetSection("Jwt:SigningKey").Get<string>();
-                var audience = _configuration.GetSection("Jwt:Audience").Get<string>();
-                var issuer = _configuration.GetSection("Jwt:Issuer").Get<string>();
-                if(key == null || audience == null || issuer == null)
-                {
-                    throw new Exception("Config can not be found");
-                }
-                var token = JwtUtils.GenerateToken(user, key, issuer, audience);
-                return Ok(new
-                {
-                    token
-                }); 
-            }
-            return Unauthorized();
+                token
+            });
         }
 
         [Authorize]
         [HttpGet("currentUser")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var userName = User.FindFirstValue(ClaimTypes.Name);
-            var user = await _userManager.FindByNameAsync(userName);
-            if(user == null)
+            var result = await _authService.GetCurrentUser();
+            if(result == null)
             {
-                return NotFound();
+                return BadRequest("No user found");
             }
-            return Ok(new
-            {
-                user.UserName,
-                user .UserRole,
-                user.CompanyName,
-                user.ProfileImageUrl
-            });
+            return Ok(result);
+        }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("switchrole")]
+        public async Task<IActionResult> SwitchUserRole([FromBody] SwitchRoleDto switchRoleDto)
+        {
+            var result = await _authService.SwitchUserRole(switchRoleDto);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Update role failed");
+            }
+            return Ok($"Role updated to {switchRoleDto.NewRole} for {switchRoleDto.UserName}");
         }
     }
 }

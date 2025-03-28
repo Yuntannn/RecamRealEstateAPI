@@ -2,12 +2,12 @@
 {
     public enum PropertyType
     {
-        House,
-        Townhouse,
-        Apartment,
-        Villa,
-        Unit,
-        Duplex,
-        Penthouse
+        House,     // 0
+        Townhouse, // 1
+        Apartment, // 2
+        Villa,     // 3
+        Unit,      // 4
+        Duplex,    // 5
+        Penthouse  // 6
     }
 }

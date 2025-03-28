@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Recam.RealEstate.API;
 using Recam.RealEstate.API.Models;
+using Recam.RealEstate.API.Repositories.ListingCaseRepository;
+using Recam.RealEstate.API.Services.AuthService;
+using Recam.RealEstate.API.Services.ListingCaseService;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,6 +28,14 @@ builder.Services.AddDbContext<RecamDbContext>(option =>
 
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
 builder.Services.AddSingleton<MongoDbContext>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<IListingCaseRepository, ListingCaseRepository>();
+builder.Services.AddScoped<IListingCaseService, ListingCaseService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddIdentity<User, IdentityRole>()
         .AddEntityFrameworkStores<RecamDbContext>()

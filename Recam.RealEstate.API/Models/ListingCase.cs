@@ -13,7 +13,7 @@ namespace Recam.RealEstate.API.Models
         public int Bathrooms { get; set; }
         public int Garage { get; set; }
         public decimal Landsize { get; set; }
-        public decimal AreaSize { get; set; }
+        public decimal Areasize { get; set; }
         public decimal Price { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public string CreateById { get; set; }
