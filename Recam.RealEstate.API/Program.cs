@@ -5,8 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 using Recam.RealEstate.API;
 using Recam.RealEstate.API.Models;
 using Recam.RealEstate.API.Repositories.ListingCaseRepository;
+using Recam.RealEstate.API.Repositories.MediaRepository;
 using Recam.RealEstate.API.Services.AuthService;
 using Recam.RealEstate.API.Services.ListingCaseService;
+using Recam.RealEstate.API.Services.MediaService;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -33,6 +35,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IListingCaseRepository, ListingCaseRepository>();
 builder.Services.AddScoped<IListingCaseService, ListingCaseService>();
+
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+builder.Services.AddScoped<IMediaService, MediaService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program));

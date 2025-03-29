@@ -24,7 +24,7 @@ namespace Recam.RealEstate.API.Controllers
         public async Task<IActionResult> CreateListingCase(ListingCaseRequestDto listingCaseRequestDto)
         {
             var result = await _listingCaseService.CreateListingCase(listingCaseRequestDto);
-            return CreatedAtAction(nameof(GetListingCaseById), new { id = result.ListingCaseId }, result);
+            return CreatedAtAction(nameof(GetListingCaseById), new { id = result.Id }, result);
         }
 
         [HttpGet("listings/{id}")]

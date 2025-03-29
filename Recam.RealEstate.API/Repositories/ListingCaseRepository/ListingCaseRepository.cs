@@ -34,14 +34,8 @@ namespace Recam.RealEstate.API.Repositories.ListingCaseRepository
 
         public async Task<List<ListingCaseDto>> GetListingCases()
         {
-            var listingCaseDtos = new List<ListingCaseDto>();
             var listingCases = await _recamDbContext.ListingCases.ToListAsync();
-            foreach(var listingCase in listingCases)
-            {
-                var listingCaseDto = _mapper.Map<ListingCaseDto>(listingCase);
-                listingCaseDtos.Add(listingCaseDto);
-            }
-            return listingCaseDtos;
+            return _mapper.Map<List<ListingCaseDto>>(listingCases);
         }
 
         public async Task<ListingCaseDto> UpdateListingCaseById(int id, ListingCaseRequestDto listingCaseRequestDto)

@@ -2,8 +2,8 @@
 {
     public enum MediaType
     {
-        Photo,
-        Video,
-        FloorPlan
+        Photo,      // 0
+        Video,      // 1
+        FloorPlan   // 2
     }
 }

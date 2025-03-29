@@ -15,6 +15,10 @@ namespace Recam.RealEstate.API
 
             CreateMap<ListingCase, ListingCaseDto>();
             CreateMap<ListingCaseDto, ListingCase>();
+
+            CreateMap<MediaAsset, MediaDto>();
+
+            CreateMap<MediaRequestDto, MediaAsset>();
         }
     }
 }

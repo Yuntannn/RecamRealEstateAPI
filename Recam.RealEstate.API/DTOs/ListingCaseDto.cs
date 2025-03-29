@@ -4,7 +4,7 @@ namespace Recam.RealEstate.API.DTOs
 {
     public class ListingCaseDto
     {
-        public int ListingCaseId { get; set; }
+        public int Id { get; set; }
         public string? Address { get; set; }
         public PropertyType PropertyType { get; set; }
         public PropertyStatus PropertyStatus { get; set; }
