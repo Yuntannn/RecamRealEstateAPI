@@ -261,33 +261,33 @@ namespace Recam.RealEstate.API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ListingCaseId = table.Column<int>(type: "int", nullable: false),
-                    UploadById = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AgentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SelectById = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MediaAssetId = table.Column<int>(type: "int", nullable: false),
-                    IsHero = table.Column<bool>(type: "bit", nullable: true),
-                    DisplayInGallery = table.Column<bool>(type: "bit", nullable: true),
+                    IsHero = table.Column<bool>(type: "bit", nullable: false),
+                    DisplayInGallery = table.Column<bool>(type: "bit", nullable: false),
                     SelectAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SelectMedias", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SelectMedias_AspNetUsers_AgentId",
-                        column: x => x.AgentId,
+                        name: "FK_SelectMedias_AspNetUsers_SelectById",
+                        column: x => x.SelectById,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SelectMedias_ListingCases_ListingCaseId",
                         column: x => x.ListingCaseId,
                         principalTable: "ListingCases",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SelectMedias_MediaAssets_MediaAssetId",
                         column: x => x.MediaAssetId,
                         principalTable: "MediaAssets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -362,11 +362,6 @@ namespace Recam.RealEstate.API.Migrations
                 column: "UploadedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SelectMedias_AgentId",
-                table: "SelectMedias",
-                column: "AgentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SelectMedias_ListingCaseId",
                 table: "SelectMedias",
                 column: "ListingCaseId");
@@ -375,6 +370,11 @@ namespace Recam.RealEstate.API.Migrations
                 name: "IX_SelectMedias_MediaAssetId",
                 table: "SelectMedias",
                 column: "MediaAssetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelectMedias_SelectById",
+                table: "SelectMedias",
+                column: "SelectById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatusHistories_ChangedById",

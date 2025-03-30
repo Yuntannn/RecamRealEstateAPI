@@ -262,13 +262,10 @@ namespace Recam.RealEstate.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AgentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool?>("DisplayInGallery")
+                    b.Property<bool>("DisplayInGallery")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsHero")
+                    b.Property<bool>("IsHero")
                         .HasColumnType("bit");
 
                     b.Property<int>("ListingCaseId")
@@ -280,17 +277,17 @@ namespace Recam.RealEstate.API.Migrations
                     b.Property<DateTime>("SelectAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UploadById")
+                    b.Property<string>("SelectById")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AgentId");
 
                     b.HasIndex("ListingCaseId");
 
                     b.HasIndex("MediaAssetId");
+
+                    b.HasIndex("SelectById");
 
                     b.ToTable("SelectMedias");
                 });
@@ -501,20 +498,22 @@ namespace Recam.RealEstate.API.Migrations
 
             modelBuilder.Entity("Recam.RealEstate.API.Models.SelectMedia", b =>
                 {
-                    b.HasOne("Recam.RealEstate.API.Models.User", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentId");
-
                     b.HasOne("Recam.RealEstate.API.Models.ListingCase", "ListingCase")
                         .WithMany()
                         .HasForeignKey("ListingCaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Recam.RealEstate.API.Models.MediaAsset", "MediaAsset")
                         .WithMany()
                         .HasForeignKey("MediaAssetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Recam.RealEstate.API.Models.User", "Agent")
+                        .WithMany()
+                        .HasForeignKey("SelectById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Agent");

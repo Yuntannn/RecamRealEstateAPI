@@ -48,11 +48,12 @@ namespace Recam.RealEstate.API
                 s.Property(s => s.NewStatus).IsRequired().HasConversion<string>();
             });
 
-            //modelBuilder.Entity<SelectMedia>(s =>
-            //{
-            //    s.HasOne(s => s.MediaAsset).WithMany().HasForeignKey(sm => sm.MediaAssetId).OnDelete(DeleteBehavior.Restrict);
-            //    s.HasOne(s => s.ListingCase).WithMany().HasForeignKey(sm => sm.ListingCaseId).OnDelete(DeleteBehavior.Restrict);
-            //});
+            modelBuilder.Entity<SelectMedia>(s =>
+            {
+                s.HasOne(s => s.MediaAsset).WithMany().HasForeignKey(sm => sm.MediaAssetId).OnDelete(DeleteBehavior.Restrict);
+                s.HasOne(s => s.ListingCase).WithMany().HasForeignKey(sm => sm.ListingCaseId).OnDelete(DeleteBehavior.Restrict);
+                s.HasOne(s => s.Agent).WithMany().HasForeignKey(sm => sm.SelectById).OnDelete(DeleteBehavior.Restrict);
+            });
 
 
 

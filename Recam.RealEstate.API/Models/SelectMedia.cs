@@ -3,8 +3,8 @@
     public class SelectMedia
     {
         public int Id { get; set; }
-        //public int ListingCaseId { get; set; }
-        //public ListingCase ListingCase { get; set; }
+        public int ListingCaseId { get; set; }
+        public ListingCase ListingCase { get; set; }
         public string SelectById { get; set; }
         public User Agent { get; set; }
         public int MediaAssetId { get; set; }
