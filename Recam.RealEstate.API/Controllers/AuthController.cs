@@ -57,7 +57,7 @@ namespace Recam.RealEstate.API.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPatch("switchrole")]
         public async Task<IActionResult> SwitchUserRole([FromBody] SwitchRoleDto switchRoleDto)
         {

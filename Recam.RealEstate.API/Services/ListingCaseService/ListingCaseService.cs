@@ -40,9 +40,9 @@ namespace Recam.RealEstate.API.Services.ListingCaseService
             return await _listingCaseRepository.DeleteListingCaseById(id);
         }
 
-        public async Task<ListingCaseDto> ChangeListingCaseStatusById(int id, PropertyStatus propertyStatus)
+        public async Task<ListingCaseDto> ChangeListingCaseStatusById(int id, PropertyStatus propertyStatus, string changedById)
         {
-            return await _listingCaseRepository.ChangeListingCaseStatusById(id, propertyStatus);
+            return await _listingCaseRepository.ChangeListingCaseStatusById(id, propertyStatus, changedById);
         }
 
         

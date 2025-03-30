@@ -24,6 +24,9 @@ namespace Recam.RealEstate.API.Services.MediaService
         {
             return await _mediaRepository.DeleteMediaById(id);
         }
-
+        //public async Task<List<MediaDto>> SelectMediaByCaseId(SelectMediaRequestDto selectMediaRequestDto)
+        //{
+        //    return await _mediaRepository.SelectMediaByCaseId(selectMediaRequestDto);
+        //}
     }
 }

@@ -26,12 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
-    <Folder Include="Repositories\CaseHistoryRepository\" />
-    <Folder Include="Repositories\UserActivityLogRepository\" />
-    <Folder Include="Repositories\UserRepository\" />
-    <Folder Include="Services\CaseHistoryService\" />
-    <Folder Include="Services\UserActivityLogService\" />
-    <Folder Include="Services\UserService\" />
     <Folder Include="Validations\" />
   </ItemGroup>
 

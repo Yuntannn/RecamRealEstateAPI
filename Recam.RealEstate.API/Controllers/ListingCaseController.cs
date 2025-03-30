@@ -58,9 +58,9 @@ namespace Recam.RealEstate.API.Controllers
         }
 
         [HttpPatch("listings/{id}")]
-        public async Task<IActionResult> ChangeListingCaseStatusById(int id, PropertyStatus propertyStatus)
+        public async Task<IActionResult> ChangeListingCaseStatusById(int id, PropertyStatus propertyStatus, string changedById)
         {
-            var listingCase = await _listingCaseService.ChangeListingCaseStatusById(id, propertyStatus);
+            var listingCase = await _listingCaseService.ChangeListingCaseStatusById(id, propertyStatus, changedById);
             return Ok(listingCase);
         }
     }

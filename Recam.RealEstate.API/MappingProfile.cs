@@ -19,6 +19,8 @@ namespace Recam.RealEstate.API
             CreateMap<MediaAsset, MediaDto>();
 
             CreateMap<MediaRequestDto, MediaAsset>();
+
+            CreateMap<SelectMedia, MediaDto>();
         }
     }
 }

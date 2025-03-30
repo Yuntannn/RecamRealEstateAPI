@@ -13,6 +13,7 @@ namespace Recam.RealEstate.API
         public DbSet<ListingCase> ListingCases { get; set; }
         public DbSet<MediaAsset> MediaAssets { get; set; }
         public DbSet<StatusHistory> StatusHistories { get; set; }
+        public DbSet<SelectMedia> SelectMedias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,9 +48,15 @@ namespace Recam.RealEstate.API
                 s.Property(s => s.NewStatus).IsRequired().HasConversion<string>();
             });
 
+            //modelBuilder.Entity<SelectMedia>(s =>
+            //{
+            //    s.HasOne(s => s.MediaAsset).WithMany().HasForeignKey(sm => sm.MediaAssetId).OnDelete(DeleteBehavior.Restrict);
+            //    s.HasOne(s => s.ListingCase).WithMany().HasForeignKey(sm => sm.ListingCaseId).OnDelete(DeleteBehavior.Restrict);
+            //});
 
 
-            
+
+
         }
     }
 }

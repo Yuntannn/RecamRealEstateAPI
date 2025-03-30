@@ -11,6 +11,6 @@ namespace Recam.RealEstate.API.Services.ListingCaseService
         Task<List<ListingCaseDto>> GetListingCases();
         Task<ListingCaseDto> UpdateListingCaseById(int id, ListingCaseRequestDto listingCaseRequestDto);
         Task<ListingCase> DeleteListingCaseById(int id);
-        Task<ListingCaseDto> ChangeListingCaseStatusById(int id, PropertyStatus propertyStatus);
+        Task<ListingCaseDto> ChangeListingCaseStatusById(int id, PropertyStatus propertyStatus, string changedById);
     }
 }

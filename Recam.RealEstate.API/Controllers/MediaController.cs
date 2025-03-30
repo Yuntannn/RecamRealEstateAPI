@@ -36,8 +36,9 @@ namespace Recam.RealEstate.API.Controllers
             return Ok(reuslt);
         }
 
-        [HttpGet("listings/{id}")]
-        public async Task<IEnumerable<MediaDto>> GetAllMediaOfCaseId(int id)
+        //[Authorize(Roles = "Admin")]
+        [HttpGet("Admin/listings/{id}/media")]
+        public async Task<IEnumerable<MediaDto>> GetAllMediaOfCaseIdAdmin(int id)
         {
             var existId = await _recamDbContext.ListingCases.AnyAsync(l => l.Id == id);
             if (!existId)
@@ -46,6 +47,18 @@ namespace Recam.RealEstate.API.Controllers
             }
             return await _mediaService.GetAllMediaOfCaseId(id);
         }
+
+        //[Authorize(Roles = "Agent")]
+        //[HttpGet("Agent/listings/{id}/media")]
+        //public async Task<IEnumerable<MediaDto>> GetAllMediaOfCaseIdAgent(SelectMediaRequestDto selectMediaRequestDto)
+        //{
+        //    var existId = await _recamDbContext.ListingCases.AnyAsync(l => l.Id == selectMediaRequestDto.ListingCaseId);
+        //    if (!existId)
+        //    {
+        //        return null;
+        //    }
+        //    return await _mediaService.SelectMediaByCaseId(selectMediaRequestDto);
+        //}
 
         [HttpDelete("listings/{id}")]
         public async Task<IActionResult> DeleteMediaById(int id)

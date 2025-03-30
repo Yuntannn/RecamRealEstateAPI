@@ -8,5 +8,6 @@ namespace Recam.RealEstate.API.Services.MediaService
         Task<MediaDto> UploadMediaToCaseId(int id, MediaRequestDto mediaRequestDto);
         Task<List<MediaDto>> GetAllMediaOfCaseId(int id);
         Task<MediaDto> DeleteMediaById(int id);
+        //Task<List<MediaDto>> SelectMediaByCaseId(SelectMediaRequestDto selectMediaRequestDto);
     }
 }

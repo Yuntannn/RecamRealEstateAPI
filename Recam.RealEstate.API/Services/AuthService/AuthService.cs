@@ -12,16 +12,19 @@ namespace Recam.RealEstate.API.Services.AuthService
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor; 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly MongoDbContext _mongoDbContext;
         public AuthService(UserManager<User> userManager, 
                            IConfiguration configuration,
                            IMapper mapper,
-                           IHttpContextAccessor httpContextAccessor)
+                           IHttpContextAccessor httpContextAccessor,
+                           MongoDbContext mongoDbContext)
         {
             _userManager = userManager;
             _configuration = configuration;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _mongoDbContext = mongoDbContext;
         }
 
         public async Task<IdentityResult> Register(RegisterRequestDto registerRequestDto)
@@ -33,6 +36,16 @@ namespace Recam.RealEstate.API.Services.AuthService
                 UserRole = registerRequestDto.UserRole
             };
             var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
+
+            await _mongoDbContext.UserActivityLogs.InsertOneAsync(new UserActivityLog
+            {
+                UserId = user.Id,
+                Action = "Register",
+                Resource = "User",
+                Description = $"User {user.UserName} registered successfully!",
+                Timestamp = DateTime.Now
+            });
+
             return result;
         }
 
@@ -56,6 +69,16 @@ namespace Recam.RealEstate.API.Services.AuthService
                 throw new Exception("Config can not be found");
             }
             var token = JwtUtils.GenerateToken(user, key, issuer, audience);
+
+            await _mongoDbContext.UserActivityLogs.InsertOneAsync(new UserActivityLog
+            {
+                UserId = user.Id,
+                Action = "Login",
+                Resource = "User",
+                Description = $"{user.UserName} successfully logged in",
+                Timestamp = DateTime.Now
+            });
+
             return token;  
         }
 
@@ -86,6 +109,16 @@ namespace Recam.RealEstate.API.Services.AuthService
                 });
             }
             user.UserRole = switchRoleDto.NewRole;
+
+            await _mongoDbContext.UserActivityLogs.InsertOneAsync(new UserActivityLog
+            {
+                UserId = user.Id,
+                Action = "Role Changed",
+                Resource = "User",
+                Description = $"User {user.UserName}'s role changed to {user.UserRole}",
+                Timestamp = DateTime.Now
+            });
+
 
             return await _userManager.UpdateAsync(user);
  

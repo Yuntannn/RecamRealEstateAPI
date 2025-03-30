@@ -173,7 +173,7 @@ namespace Recam.RealEstate.API.Migrations
                     Bathrooms = table.Column<int>(type: "int", nullable: false),
                     Garage = table.Column<int>(type: "int", nullable: false),
                     Landsize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AreaSize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Areasize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateById = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -205,8 +205,6 @@ namespace Recam.RealEstate.API.Migrations
                     ListingCaseId = table.Column<int>(type: "int", nullable: false),
                     MediaType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileUrl = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsHero = table.Column<bool>(type: "bit", nullable: false),
-                    DisplayInGallery = table.Column<bool>(type: "bit", nullable: false),
                     UploadById = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UploadedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UploadAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -252,6 +250,42 @@ namespace Recam.RealEstate.API.Migrations
                         name: "FK_StatusHistories_ListingCases_ListingCaseId",
                         column: x => x.ListingCaseId,
                         principalTable: "ListingCases",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SelectMedias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ListingCaseId = table.Column<int>(type: "int", nullable: false),
+                    UploadById = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AgentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    MediaAssetId = table.Column<int>(type: "int", nullable: false),
+                    IsHero = table.Column<bool>(type: "bit", nullable: true),
+                    DisplayInGallery = table.Column<bool>(type: "bit", nullable: true),
+                    SelectAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SelectMedias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SelectMedias_AspNetUsers_AgentId",
+                        column: x => x.AgentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SelectMedias_ListingCases_ListingCaseId",
+                        column: x => x.ListingCaseId,
+                        principalTable: "ListingCases",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SelectMedias_MediaAssets_MediaAssetId",
+                        column: x => x.MediaAssetId,
+                        principalTable: "MediaAssets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -328,6 +362,21 @@ namespace Recam.RealEstate.API.Migrations
                 column: "UploadedById");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SelectMedias_AgentId",
+                table: "SelectMedias",
+                column: "AgentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelectMedias_ListingCaseId",
+                table: "SelectMedias",
+                column: "ListingCaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelectMedias_MediaAssetId",
+                table: "SelectMedias",
+                column: "MediaAssetId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StatusHistories_ChangedById",
                 table: "StatusHistories",
                 column: "ChangedById");
@@ -357,13 +406,16 @@ namespace Recam.RealEstate.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "MediaAssets");
+                name: "SelectMedias");
 
             migrationBuilder.DropTable(
                 name: "StatusHistories");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "MediaAssets");
 
             migrationBuilder.DropTable(
                 name: "ListingCases");

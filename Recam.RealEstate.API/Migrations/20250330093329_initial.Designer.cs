@@ -12,7 +12,7 @@ using Recam.RealEstate.API;
 namespace Recam.RealEstate.API.Migrations
 {
     [DbContext(typeof(RecamDbContext))]
-    [Migration("20250327064602_initial")]
+    [Migration("20250330093329_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -171,7 +171,7 @@ namespace Recam.RealEstate.API.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<decimal>("AreaSize")
+                    b.Property<decimal>("Areasize")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("AssignedToId")
@@ -224,15 +224,9 @@ namespace Recam.RealEstate.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("DisplayInGallery")
-                        .HasColumnType("bit");
-
                     b.Property<string>("FileUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsHero")
-                        .HasColumnType("bit");
 
                     b.Property<int>("ListingCaseId")
                         .HasColumnType("int");
@@ -261,6 +255,47 @@ namespace Recam.RealEstate.API.Migrations
                     b.HasIndex("UploadedById");
 
                     b.ToTable("MediaAssets");
+                });
+
+            modelBuilder.Entity("Recam.RealEstate.API.Models.SelectMedia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AgentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool?>("DisplayInGallery")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsHero")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ListingCaseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MediaAssetId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SelectAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UploadById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgentId");
+
+                    b.HasIndex("ListingCaseId");
+
+                    b.HasIndex("MediaAssetId");
+
+                    b.ToTable("SelectMedias");
                 });
 
             modelBuilder.Entity("Recam.RealEstate.API.Models.StatusHistory", b =>
@@ -465,6 +500,31 @@ namespace Recam.RealEstate.API.Migrations
                     b.Navigation("ListingCase");
 
                     b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("Recam.RealEstate.API.Models.SelectMedia", b =>
+                {
+                    b.HasOne("Recam.RealEstate.API.Models.User", "Agent")
+                        .WithMany()
+                        .HasForeignKey("AgentId");
+
+                    b.HasOne("Recam.RealEstate.API.Models.ListingCase", "ListingCase")
+                        .WithMany()
+                        .HasForeignKey("ListingCaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recam.RealEstate.API.Models.MediaAsset", "MediaAsset")
+                        .WithMany()
+                        .HasForeignKey("MediaAssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
+
+                    b.Navigation("ListingCase");
+
+                    b.Navigation("MediaAsset");
                 });
 
             modelBuilder.Entity("Recam.RealEstate.API.Models.StatusHistory", b =>
